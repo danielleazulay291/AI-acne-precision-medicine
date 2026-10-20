@@ -1,0 +1,35 @@
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# PyCharm
+.idea/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+*.key
+
+# Biological datasets
+*.gz
+*.fastq
+*.fastq.gz
+*.bam
+*.sam
+*.h5
+*.h5ad
+
+# Local data files
+data/raw/
+data/processed/
+
+# Temporary files
+*.log
+*.tmp
