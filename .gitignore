@@ -33,3 +33,7 @@ data/processed/
 # Temporary files
 *.log
 *.tmp
+
+
+# Trained machine learning models
+*.joblib

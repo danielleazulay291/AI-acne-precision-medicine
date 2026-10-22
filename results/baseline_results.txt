@@ -145,3 +145,77 @@ The external dataset will remain independent during evaluation.
 
 **Long-term objective:** Extend the platform beyond tissue classification toward identification of patient-specific molecular
 pathways and potential mechanisms associated with acne, as a foundation for future precision-medicine research.
+
+
+
+
+--------------------------------------------------
+EXTERNAL VALIDATION — GSE108110
+--------------------------------------------------
+
+Training dataset: GSE53795
+Training samples: 24 (12 lesional, 12 non-lesional)
+External dataset: GSE108110
+External samples: 54 (36 lesional, 18 non-lesional)
+
+Model:
+Logistic Regression (saga, elastic-net regularization,
+l1_ratio=0.5, C=0.1)
+VarianceThreshold + SelectKBest (100 probes) + StandardScaler
+
+The final pipeline was trained on all 24 samples from GSE53795
+and saved as models/final_model.joblib.
+
+External predictions were generated without fitting the model
+or preprocessing pipeline on GSE108110.
+
+EXTERNAL VALIDATION RESULTS
+
+Accuracy: 79.63% (43/54)
+Lesional precision: 0.93
+Lesional recall: 0.75
+Lesional F1-score: 0.83
+
+Confusion matrix:
+[[16, 2],
+ [ 9, 27]]
+
+PERFORMANCE BY BIOLOGICAL GROUP
+
+Early papules (<48 hours):
+18/18 correct (100%)
+
+Non-lesional skin:
+16/18 correct (88.89%)
+
+Papules at 21 days:
+9/18 correct (50%)
+
+INTERPRETATION
+
+The model showed promising preliminary cross-study performance,
+particularly for early acne papules.
+
+All nine false-negative predictions occurred in the
+21-day papule groups.
+
+This pattern may reflect biological differences between
+early and later-stage lesions, but further investigation
+is required.
+
+LIMITATIONS
+
+- Small training dataset (12 patients).
+- External samples include repeated measurements from patients.
+- Potential batch effects and study-specific technical differences.
+- Independent preprocessing may introduce distribution shifts.
+- Classification performance does not establish biological
+  causality or clinical validity.
+
+NEXT STEPS
+
+1. Save detailed external validation results.
+2. Investigate misclassified samples.
+3. Map selected microarray probes to genes.
+4. Explore biological pathways associated with predictions.
+5. Evaluate additional independent datasets.

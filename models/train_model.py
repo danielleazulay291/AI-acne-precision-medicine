@@ -2,11 +2,6 @@
 from pathlib import Path
 import sys
 from sklearn.model_selection import GroupKFold
-from sklearn.pipeline import Pipeline
-from sklearn.feature_selection import VarianceThreshold
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.base import clone
 from sklearn.metrics import (
     accuracy_score,
@@ -19,6 +14,8 @@ project_root = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(project_root))
 
 from data.load_data import load_expression_data
+from models.model_pipeline import build_pipeline
+
 
 # Load gene expression data and metadata
 df, metadata = load_expression_data()
@@ -65,20 +62,7 @@ for fold, (train_idx, test_idx) in enumerate(
 
 
 # Define the machine learning pipeline
-
-# Define the machine learning pipeline
-pipeline = Pipeline([
-    ("variance_filter", VarianceThreshold(threshold=0.0)),
-    ("feature_selection", SelectKBest(score_func=f_classif, k=100)),
-    ("scaler", StandardScaler()),
-    ("classifier", LogisticRegression(
-        solver="saga",
-        l1_ratio=0.5,
-        C=0.1,
-        max_iter=5000,
-        random_state=42
-    ))
-])
+pipeline = build_pipeline()
 
 print("\n--- ML PIPELINE ---")
 print(pipeline)

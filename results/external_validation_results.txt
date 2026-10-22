@@ -1,0 +1,51 @@
+
+EXTERNAL VALIDATION RESULTS
+===========================
+
+Training dataset: GSE53795
+External dataset: GSE108110
+Training samples: 24
+External samples: 54
+
+--- OVERALL PERFORMANCE ---
+
+Accuracy: 79.63% (43/54)
+
+Classification Report:
+              precision    recall  f1-score   support
+
+Non-lesional       0.64      0.89      0.74        18
+Lesional           0.93      0.75      0.83        36
+
+accuracy                           0.80        54
+macro avg          0.79      0.82      0.79        54
+weighted avg       0.83      0.80      0.80        54
+
+Confusion Matrix:
+[[16, 2],
+ [ 9, 27]]
+
+--- RESULTS BY BIOLOGICAL GROUP ---
+
+Non-scar-prone non-lesional skin: 7/9 (77.78%)
+Non-scar-prone papule at 21 days: 3/9 (33.33%)
+Non-scar-prone papule less than 48 H old: 9/9 (100%)
+
+Scar-prone non-lesional skin: 9/9 (100%)
+Scar-prone papule at 21 days: 6/9 (66.67%)
+Scar-prone papule less than 48 H old: 9/9 (100%)
+
+--- KEY OBSERVATIONS ---
+
+1. Overall external accuracy was 79.63%.
+2. All 18 early papules were classified correctly.
+3. Only 9 of 18 papules at 21 days were classified correctly.
+4. The model correctly classified 16 of 18 non-lesional samples.
+5. All 9 false negatives were from the 21-day papule groups.
+
+--- LIMITATIONS ---
+
+Small training cohort, repeated samples from external patients,
+possible batch effects, and potential differences in preprocessing.
+
+Results are exploratory and do not establish clinical validity.
