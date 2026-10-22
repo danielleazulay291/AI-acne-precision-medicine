@@ -26,3 +26,122 @@ Important limitations:
 - Classification of lesional vs non-lesional skin,
   not identification of individual acne causes.
 - Results require further robustness testing.
+
+---
+
+## Additional Validation Results — GSE53795
+
+### 1. Internal Cross-Validation
+
+The model was evaluated using 4-fold GroupKFold cross-validation, with patient IDs used as grouping variables to prevent patient overlap between training and validation sets.
+
+Dataset:
+- 12 patients
+- 24 paired skin samples
+- 12 lesional samples
+- 12 non-lesional samples
+- 54,675 microarray probe sets per sample
+
+Results:
+- Mean cross-validation accuracy: 100%
+- Correct out-of-fold predictions: 24/24
+- Precision: 1.00 for both classes
+- Recall: 1.00 for both classes
+- F1-score: 1.00 for both classes
+
+Confusion Matrix:
+
+```
+                 Predicted
+                 Non-lesional  Lesional
+Actual Non-lesional    12        0
+Actual Lesional         0       12
+```
+
+These results demonstrate excellent classification performance within the available dataset under patient-grouped cross-validation.
+
+### 2. Permutation Test
+
+A preliminary permutation test was performed to assess whether the observed classification accuracy could be reproduced when class labels were randomly reassigned.
+
+The test used 20 random permutations, preserving the paired patient structure by randomly swapping lesional and non-lesional labels within patients.
+
+Results:
+- Original accuracy: 100.00%
+- Mean permuted accuracy: 44.17%
+- Maximum permuted accuracy: 62.50%
+- Empirical p-value: 0.0476
+
+None of the 20 permuted datasets achieved the original model accuracy.
+
+Interpretation:
+
+The observed decrease in performance after label permutation supports the presence of a relationship between gene expression patterns and tissue classification.
+
+However, the permutation test is preliminary. With only 20 permutations, 0.0476 is the minimum attainable empirical p-value. Additional permutations would provide a more precise statistical estimate.
+
+### 3. Metadata Consistency Check
+
+Sample metadata was inspected to verify patient pairing and class labels.
+
+Findings:
+- All 12 patients have exactly two samples.
+- Each patient has one lesional and one non-lesional sample.
+- Sample identifiers and tissue labels are consistently organized.
+- Lesional samples consistently precede non-lesional samples in the dataset.
+
+The available processed metadata contains four fields:
+- sample_id
+- sample_title
+- patient_id
+- tissue_type
+
+No batch identifiers or processing dates are included in the current metadata table.
+
+This check confirms the expected paired sample structure but does not rule out potential technical confounding.
+
+### 4. Current Model Capabilities
+
+The model classifies skin tissue samples as lesional or non-lesional based on microarray gene expression measurements.
+
+It does not analyze clinical photographs or diagnose acne from images.
+
+The model has demonstrated successful out-of-fold classification within GSE53795.
+
+It has not yet been evaluated on an independent external dataset.
+
+### 5. Limitations
+
+- Small dataset: 12 patients and 24 samples.
+- High-dimensional input: 54,675 probe sets.
+- All samples originate from the same study.
+- Potential batch effects and technical confounding have not been fully excluded.
+- The preliminary permutation test includes only 20 permutations.
+- External generalization remains unknown.
+- Classification performance does not establish which biological mechanisms cause acne.
+- The model is not clinically validated and is not intended for diagnostic or treatment decisions.
+
+### 6. Next Step — External Validation
+
+The next development stage is to evaluate the model on an independent gene expression dataset.
+
+Planned procedure:
+
+1. Train the complete preprocessing and classification pipeline on all 24 samples from GSE53795.
+2. Obtain an independent dataset containing lesional and non-lesional acne skin samples.
+3. Verify compatibility of microarray features and preprocessing methods.
+4. Apply the trained pipeline to the external samples without fitting it on external labels or samples.
+5. Compare predictions against the external ground-truth labels.
+6. Calculate accuracy, precision, recall, F1-score, and confusion matrix.
+7. Assess whether classification performance generalizes beyond the original study.
+
+The external dataset will remain independent during evaluation.
+
+### Project Status
+
+**Completed:** Initial model development, patient-grouped cross-validation, baseline performance evaluation, preliminary permutation testing, and metadata consistency checks.
+
+**Next milestone:** Independent external validation.
+
+**Long-term objective:** Extend the platform beyond tissue classification toward identification of patient-specific molecular
+pathways and potential mechanisms associated with acne, as a foundation for future precision-medicine research.
