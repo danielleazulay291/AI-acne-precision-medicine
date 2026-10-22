@@ -6,7 +6,13 @@ from sklearn.pipeline import Pipeline
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
-
+from sklearn.feature_selection import SelectKBest, f_classif
+from sklearn.base import clone
+from sklearn.metrics import (
+    accuracy_score,
+    classification_report,
+    confusion_matrix
+)
 
 # Add the project root to Python's import path
 project_root = Path(__file__).resolve().parent.parent
@@ -59,11 +65,13 @@ for fold, (train_idx, test_idx) in enumerate(
 
 
 # Define the machine learning pipeline
+
+# Define the machine learning pipeline
 pipeline = Pipeline([
     ("variance_filter", VarianceThreshold(threshold=0.0)),
+    ("feature_selection", SelectKBest(score_func=f_classif, k=100)),
     ("scaler", StandardScaler()),
     ("classifier", LogisticRegression(
-        penalty="elasticnet",
         solver="saga",
         l1_ratio=0.5,
         C=0.1,
@@ -74,5 +82,53 @@ pipeline = Pipeline([
 
 print("\n--- ML PIPELINE ---")
 print(pipeline)
+
+print("\n--- MODEL TRAINING ---")
+
+fold_accuracies = []
+all_true = []
+all_pred = []
+
+for fold, (train_idx, test_idx) in enumerate(
+        cv.split(X, y, groups=groups), start=1):
+
+    X_train = X.iloc[train_idx]
+    X_test = X.iloc[test_idx]
+
+    y_train = y.iloc[train_idx]
+    y_test = y.iloc[test_idx]
+
+    model = clone(pipeline)
+
+    model.fit(X_train, y_train)
+
+    y_pred = model.predict(X_test)
+    all_true.extend(y_test.tolist())
+    all_pred.extend(y_pred.tolist())
+
+    accuracy = accuracy_score(y_test, y_pred)
+    fold_accuracies.append(accuracy)
+
+    print(f"\nFold {fold}")
+    print("Actual labels:", y_test.tolist())
+    print("Predicted labels:", y_pred.tolist())
+    print(f"Accuracy: {accuracy:.2%}")
+
+
+print("\n--- OVERALL MODEL EVALUATION ---")
+
+print("Mean Accuracy:", sum(fold_accuracies) / len(fold_accuracies))
+
+print("\nClassification Report:")
+print(classification_report(
+    all_true,
+    all_pred,
+    target_names=["Non-lesional", "Lesional"]
+))
+
+print("\nConfusion Matrix:")
+print(confusion_matrix(all_true, all_pred))
+
+
 
 

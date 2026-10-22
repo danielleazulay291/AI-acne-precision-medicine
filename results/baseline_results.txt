@@ -1,0 +1,28 @@
+Acne Precision Medicine AI
+Baseline ML Results — 22.10.2026
+
+Dataset: GSE53795
+Patients: 12
+Samples: 24
+Features: 54,675
+
+Model: Logistic Regression with Elastic Net
+Feature Selection: SelectKBest (100 features)
+Cross-Validation: GroupKFold (4 folds)
+
+Mean Accuracy: 100%
+Precision: 1.00
+Recall: 1.00
+F1-score: 1.00
+
+Confusion Matrix:
+[[12, 0],
+ [0, 12]]
+
+Important limitations:
+- Very small dataset (12 patients).
+- Results are based on internal cross-validation.
+- No independent external validation.
+- Classification of lesional vs non-lesional skin,
+  not identification of individual acne causes.
+- Results require further robustness testing.
